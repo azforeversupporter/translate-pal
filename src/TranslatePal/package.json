@@ -8,6 +8,7 @@
     "build": "webpack --config webpack.config.js --progress --profile --display-error-details",
     "prod": "webpack -p --config webpack.prod.config.js --progress --devtool source-map --display-error-details",
     "test": "karma start",
+    "server": "dnx web",
     "postinstall": "node copy-typings.js"
   },
   "repository": {
