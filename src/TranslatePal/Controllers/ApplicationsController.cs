@@ -22,6 +22,37 @@ namespace TranslatePal.Controllers
             return Ok(applications);
         }
 
+        [HttpGet]
+        [Route("/api/v1/applications/{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var application = await db.Applications
+                .Include(a => a.Bundles)
+                .SingleOrDefaultAsync(app => app.Id == id);
+
+            if (application == null)
+            {
+                return HttpNotFound();
+            }
+
+            return Ok(application);
+        }
+
+        [HttpPost]
+        [Route("/api/v1/applications/")]
+        public async Task<IActionResult> Post([FromBody] Application application)
+        {
+            if (!ModelState.IsValid)
+            {
+                return HttpBadRequest(ModelState);
+            }
+
+            db.Applications.Add(application);
+            await db.SaveChangesAsync();
+
+            return Created($"/api/v1/applications/{application.Id}", application);
+        }
+
         private ApplicationDbContext db;
     }
 }
