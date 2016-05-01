@@ -3,6 +3,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TranslatePal.Data.SqlServer;
 
 namespace TranslatePal
 {
@@ -39,6 +40,8 @@ namespace TranslatePal
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            SampleData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
         }
 
         // Entry point for the application.
