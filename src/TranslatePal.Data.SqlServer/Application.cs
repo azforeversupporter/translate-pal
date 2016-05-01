@@ -7,6 +7,11 @@ namespace TranslatePal.Data.SqlServer
 {
     public class Application
     {
+        public Application()
+        {
+            Bundles = new List<Bundle>();
+        }
+
         [Key]
         [Required]
         public int Id { get; set; }
@@ -38,5 +43,7 @@ namespace TranslatePal.Data.SqlServer
 
         [NotMapped]
         public List<string> AvailableLanguages { get; set; }
+
+        public virtual ICollection<Bundle> Bundles { get; set; }
     }
 }
