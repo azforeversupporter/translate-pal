@@ -8,7 +8,7 @@
     "sourceMap": true
   },
   "filesGlob": [
-    "./src/**/*.ts",
+    "./client/**/*.ts",
     "!./node_modules",
     "./typings/browser.d.ts"
   ],

@@ -19,7 +19,9 @@ module.exports = {
         chunkFilename: '[id]' + outputFileTemplateSuffix + '.js'
     },
     plugins: [
-        new AureliaWebpackPlugin(),
+        new AureliaWebpackPlugin({
+            src: path.resolve('./client')
+        }),
         new HtmlWebpackPlugin({
             title: 'Translate Pal - ' + pkg.version,
             template: 'index.prod.html',
