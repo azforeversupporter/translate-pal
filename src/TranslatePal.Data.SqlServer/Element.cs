@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TranslatePal.Data.SqlServer
 {
@@ -6,6 +7,7 @@ namespace TranslatePal.Data.SqlServer
     {
         public Element()
         {
+            Resources = new List<Resource>();
         }
 
         [Key]
@@ -21,5 +23,7 @@ namespace TranslatePal.Data.SqlServer
         [Required]
         public int BundleId { get; set; }
         public Bundle Bundle { get; set; }
+
+        public virtual ICollection<Resource> Resources { get; set; }
     }
 }
