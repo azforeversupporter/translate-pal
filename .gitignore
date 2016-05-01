@@ -1,3 +1,5 @@
 .vs
 *.xproj.user
 *.lock.json
+node_modules/
+typings/
