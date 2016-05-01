@@ -6,6 +6,7 @@ namespace TranslatePal.Data.SqlServer
     {
         public DbSet<Application> Applications { get; set; }
         public DbSet<Bundle> Bundles { get; set; }
+        public DbSet<Element> Elements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -13,6 +14,9 @@ namespace TranslatePal.Data.SqlServer
 
             modelBuilder.Entity<Bundle>()
                 .HasAlternateKey(bundle => new { bundle.Name, bundle.ApplicationId });
+
+            modelBuilder.Entity<Element>()
+                .HasAlternateKey(element => new { element.BundleId, element.ElementName });
         }
     }
 }
