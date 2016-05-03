@@ -31,6 +31,8 @@ namespace TranslatePal
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
+            services.AddCors();
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -48,6 +50,14 @@ namespace TranslatePal
             loggerFactory.AddDebug();
 
             app.UseIISPlatformHandler();
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
