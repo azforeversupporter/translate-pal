@@ -1,12 +1,25 @@
 ﻿import {inject, Aurelia} from 'aurelia-framework';
 import {Router, RouterConfiguration} from 'aurelia-router';
+import {HttpClient} from 'aurelia-fetch-client';
 
-@inject(Aurelia)
+@inject(Aurelia, HttpClient)
 export class App {
 
-    constructor(aurelia: Aurelia) {
+    constructor(aurelia: Aurelia, http: HttpClient) {
 
         this.aurelia = aurelia;
+        http.configure(config => {
+
+            // TODO: Load from configuration file
+            config
+                .withBaseUrl('http://localhost:4999/api/v1/')
+                .withDefaults({
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .rejectErrorResponses();
+        });
     }
 
     router: Router;
