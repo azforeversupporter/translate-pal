@@ -1,0 +1,13 @@
+﻿<template>
+    <form action="" method="post" submit.delegate="login($event)">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" value.bind="username" />
+        <br />
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" value.bind="password" />
+        <br />
+
+        <input type="submit" value="Log in" />
+    </form>
+</template>

@@ -9,5 +9,5 @@ bootstrap((aurelia: Aurelia): void => {
         .developmentLogging();
 
     aurelia.start()
-        .then(() => aurelia.setRoot('app', document.body));
+        .then(() => aurelia.setRoot('login', document.body));
 });
