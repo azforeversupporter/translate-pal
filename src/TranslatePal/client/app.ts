@@ -29,7 +29,7 @@ export class App {
         
         config.title = 'Translate Pal';
         config.map([
-            { route: ['', 'home'], name: 'home', moduleId: 'home', nav: true, title: 'Home' }
+            { route: ['', 'dashboard'], name: 'dashboard', moduleId: './applications/dashboard/routes/index', nav: true, title: 'Dashboard' }
         ]);
 
         this.router = router;
