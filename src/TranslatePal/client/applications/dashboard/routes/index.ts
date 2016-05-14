@@ -30,6 +30,25 @@ export class Index {
 
         this.selectedApp = this.applications.find(app => app.id === id);
     }
+    
+    public deleteApp(app: Application) {
+        
+        if (confirm(`Are you sure you want to delete the application:\n${app.displayName}?\nThis change cannot be reverted!`)) {
+            
+            this.http.fetch(`applications/${app.id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                
+                let index = this.applications.findIndex(a => a.id === app.id);
+                if (index > -1) {
+                    
+                    this.applications.splice(index, 1);
+                    this.selectedApp = null;
+                }
+            });
+        }
+    }
 
     public applications: Application[] = [];
     public router: Router;

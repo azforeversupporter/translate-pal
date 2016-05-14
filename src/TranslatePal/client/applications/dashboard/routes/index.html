@@ -4,7 +4,7 @@
     <h3>Your applications</h3>
     <ul class="applications">
         <li repeat.for="app of applications" click.delegate="showDetails(app.id)">
-            ${app.displayName} - ${app.languages}
+            ${app.displayName} - ${app.languages} <span click.delegate="deleteApp(app)">X</span>
         </li>
     </ul>
 

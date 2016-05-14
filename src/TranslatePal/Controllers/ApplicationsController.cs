@@ -52,6 +52,24 @@ namespace TranslatePal.Controllers
 
             return Created($"/api/v1/applications/{application.Id}", application);
         }
+        
+        [HttpDelete]
+        [Route("/api/v1/applications/{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var application = await db.Applications
+                .SingleOrDefaultAsync(app => app.Id == id);
+                
+            if (application == null) 
+            {
+                return HttpNotFound();
+            }
+            
+            db.Applications.Remove(application);
+            await db.SaveChangesAsync();
+            
+            return Ok();
+        }
 
         private ApplicationDbContext db;
     }
