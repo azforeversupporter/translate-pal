@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TranslatePal.Data.SqlServer;
 
@@ -32,7 +32,7 @@ namespace TranslatePal.Controllers
 
             if (application == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             return Ok(application);
@@ -44,7 +44,7 @@ namespace TranslatePal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return HttpBadRequest(ModelState);
+                return BadRequest(ModelState);
             }
 
             db.Applications.Add(application);
@@ -62,7 +62,7 @@ namespace TranslatePal.Controllers
                 
             if (application == null) 
             {
-                return HttpNotFound();
+                return NotFound();
             }
             
             db.Applications.Remove(application);
