@@ -1,8 +1,8 @@
-using System;
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Metadata;
-using Microsoft.Data.Entity.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using TranslatePal.Data.SqlServer;
 
 namespace TranslatePal.Data.SqlServer.Migrations
@@ -13,7 +13,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
+                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Application", b =>
@@ -37,6 +37,8 @@ namespace TranslatePal.Data.SqlServer.Migrations
                         .HasAnnotation("MaxLength", 255);
 
                     b.HasKey("Id");
+
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Bundle", b =>
@@ -53,6 +55,10 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Name", "ApplicationId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("Bundles");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Element", b =>
@@ -71,6 +77,10 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("BundleId", "ElementName");
+
+                    b.HasIndex("BundleId");
+
+                    b.ToTable("Elements");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Resource", b =>
@@ -92,27 +102,34 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("ElementId", "Language");
+
+                    b.HasIndex("ElementId");
+
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Bundle", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.Application")
                         .WithMany()
-                        .HasForeignKey("ApplicationId");
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Element", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.Bundle")
                         .WithMany()
-                        .HasForeignKey("BundleId");
+                        .HasForeignKey("BundleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Resource", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.Element")
                         .WithMany()
-                        .HasForeignKey("ElementId");
+                        .HasForeignKey("ElementId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }
