@@ -1,9 +1,14 @@
-﻿using Microsoft.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace TranslatePal.Data.SqlServer
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
         public DbSet<Application> Applications { get; set; }
         public DbSet<Bundle> Bundles { get; set; }
         public DbSet<Element> Elements { get; set; }

@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Microsoft.Data.Entity.Migrations;
-using Microsoft.Data.Entity.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TranslatePal.Data.SqlServer.Migrations
 {
@@ -10,7 +10,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Application",
+                name: "Applications",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -22,10 +22,11 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Application", x => x.Id);
+                    table.PrimaryKey("PK_Applications", x => x.Id);
                 });
+
             migrationBuilder.CreateTable(
-                name: "Bundle",
+                name: "Bundles",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -35,17 +36,18 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bundle", x => x.Id);
-                    table.UniqueConstraint("AK_Bundle_Name_ApplicationId", x => new { x.Name, x.ApplicationId });
+                    table.PrimaryKey("PK_Bundles", x => x.Id);
+                    table.UniqueConstraint("AK_Bundles_Name_ApplicationId", x => new { x.Name, x.ApplicationId });
                     table.ForeignKey(
-                        name: "FK_Bundle_Application_ApplicationId",
+                        name: "FK_Bundles_Applications_ApplicationId",
                         column: x => x.ApplicationId,
-                        principalTable: "Application",
+                        principalTable: "Applications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
             migrationBuilder.CreateTable(
-                name: "Element",
+                name: "Elements",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -56,17 +58,18 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Element", x => x.Id);
-                    table.UniqueConstraint("AK_Element_BundleId_ElementName", x => new { x.BundleId, x.ElementName });
+                    table.PrimaryKey("PK_Elements", x => x.Id);
+                    table.UniqueConstraint("AK_Elements_BundleId_ElementName", x => new { x.BundleId, x.ElementName });
                     table.ForeignKey(
-                        name: "FK_Element_Bundle_BundleId",
+                        name: "FK_Elements_Bundles_BundleId",
                         column: x => x.BundleId,
-                        principalTable: "Bundle",
+                        principalTable: "Bundles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
             migrationBuilder.CreateTable(
-                name: "Resource",
+                name: "Resources",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -78,23 +81,45 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resource", x => x.Id);
-                    table.UniqueConstraint("AK_Resource_ElementId_Language", x => new { x.ElementId, x.Language });
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.UniqueConstraint("AK_Resources_ElementId_Language", x => new { x.ElementId, x.Language });
                     table.ForeignKey(
-                        name: "FK_Resource_Element_ElementId",
+                        name: "FK_Resources_Elements_ElementId",
                         column: x => x.ElementId,
-                        principalTable: "Element",
+                        principalTable: "Elements",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bundles_ApplicationId",
+                table: "Bundles",
+                column: "ApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Elements_BundleId",
+                table: "Elements",
+                column: "BundleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_ElementId",
+                table: "Resources",
+                column: "ElementId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("Resource");
-            migrationBuilder.DropTable("Element");
-            migrationBuilder.DropTable("Bundle");
-            migrationBuilder.DropTable("Application");
+            migrationBuilder.DropTable(
+                name: "Resources");
+
+            migrationBuilder.DropTable(
+                name: "Elements");
+
+            migrationBuilder.DropTable(
+                name: "Bundles");
+
+            migrationBuilder.DropTable(
+                name: "Applications");
         }
     }
 }
