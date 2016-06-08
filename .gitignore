@@ -5,3 +5,6 @@ node_modules/
 typings/
 obj/
 bin/
+wwwroot/
+
+!wwwroot/web.config

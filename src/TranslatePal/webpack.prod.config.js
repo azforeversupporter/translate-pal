@@ -2,7 +2,7 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var AureliaWebpackPlugin = require('aurelia-webpack-plugin');
-var ProvidePlugin = require('webpack/lib/ProgressPlugin');
+var ProvidePlugin = require('webpack/lib/ProvidePlugin');
 var pkg = require('./package.json');
 
 var outputFileTemplateSuffix = '-' + pkg.version;
