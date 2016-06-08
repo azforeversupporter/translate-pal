@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,39 @@ namespace TranslatePal.Data.SqlServer
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<ApplicationRole>>();
 
                 await db.Database.MigrateAsync();
                 
+                if (!await db.Users.AnyAsync())
+                {
+                    var email = "test@test.com";
+                    if (await userManager.FindByEmailAsync(email) == null)
+                    {
+                        var user = new ApplicationUser
+                        {
+                            UserName = email,
+                            Email = email,
+                            EmailConfirmed = true
+                        };
+                        await userManager.CreateAsync(user, "P@ssw0rd!");
+
+                        if (await roleManager.FindByNameAsync("user") == null)
+                        {
+                            await roleManager.CreateAsync(new ApplicationRole
+                            {
+                                Name = "user"
+                            });
+                        }
+
+                        if (!await userManager.IsInRoleAsync(user, "user"))
+                        {
+                            await userManager.AddToRoleAsync(user, "user");
+                        }
+                    }
+                }
+
                 if (!await db.Applications.AnyAsync())
                 {
                     var application = new Application
