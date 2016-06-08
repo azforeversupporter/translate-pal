@@ -25,7 +25,7 @@ namespace TranslatePal.Data.SqlServer
                         AvailableLanguages = new List<string>() { "NL", "EN" },
                         DefaultLanguage = "EN"
                     };
-                    db.Applications.Add(application);
+                    db.Apps.Add(application);
                     await db.SaveChangesAsync();
 
                     var bundle = new Bundle
