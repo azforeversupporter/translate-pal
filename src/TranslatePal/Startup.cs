@@ -27,6 +27,14 @@ namespace TranslatePal
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddOpenIddict<ApplicationUser, ApplicationDbContext>()
+                .DisableHttpsRequirement()
+                .UseJsonWebTokens();
+
             services.AddCors();
 
             // Add framework services.
@@ -52,6 +60,18 @@ namespace TranslatePal
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            app.UseOpenIddict();
+
+            // Use JWT Bearer authentication
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false, // ONLY DEV!!
+                Audience = "http://localhost:5000/",
+                Authority = "http://localhost:5000/"
+            });
 
             app.UseMvc();
 
