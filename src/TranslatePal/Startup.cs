@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,8 +31,8 @@ namespace TranslatePal
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddOpenIddict<ApplicationUser, ApplicationDbContext>()
+            
+            services.AddOpenIddict<ApplicationUser, ApplicationRole, ApplicationDbContext>()
                 .DisableHttpsRequirement()
                 .UseJsonWebTokens();
 
