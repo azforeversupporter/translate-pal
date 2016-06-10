@@ -1,13 +1,13 @@
 ﻿import {inject, Aurelia} from 'aurelia-framework';
+import {AuthService} from './common/services/auth-service';
 
-// TODO: Call our API server for authentication.
-
-@inject(Aurelia)
+@inject(Aurelia, AuthService)
 export class Login {
 
-    constructor(aurelia: Aurelia) {
+    constructor(aurelia: Aurelia, authService: AuthService) {
 
         this.aurelia = aurelia;
+        this.authService = authService;
     }
 
     public username = '';
@@ -23,15 +23,24 @@ export class Login {
     }
 
     public login(evt: Event) {
+        
+        this.authService
+            .login('test@test.com', 'P@ssw0rd!')
+            .then((success) => {
 
-        if (this.username === 'user' && this.password === 'test') {
+                if (success) {
 
-            localStorage.setItem('loggedIn', true.toString());
-            this.aurelia.setRoot('app');
-        }
+                    this.aurelia.setRoot('app');
+                }
+                else {
+
+                    alert('No valid credentials');
+                }
+            });
 
         evt.preventDefault();
     }
 
     private aurelia: Aurelia = null;
+    private authService: AuthService;
 }
