@@ -124,7 +124,7 @@ export class AuthService {
         }
 
         // Token expired?
-        return true;// !(d.valueOf() > new Date().valueOf());
+        return !(d.valueOf() > new Date().valueOf());
     }
 
     private getTokenExpirationDate(): Date {

@@ -25,7 +25,7 @@ export class Login {
     public login(evt: Event) {
         
         this.authService
-            .login('test@test.com', 'P@ssw0rd!')
+            .login(this.username, this.password)
             .then((success) => {
 
                 if (success) {
@@ -36,6 +36,9 @@ export class Login {
 
                     alert('No valid credentials');
                 }
+
+                this.username = null;
+                this.password = null;
             });
 
         evt.preventDefault();
