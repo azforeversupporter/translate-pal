@@ -19,6 +19,12 @@ export class AuthService {
         if (token) {
 
             this._session = this.decodeToken(token);
+
+            if (this.isTokenExpired()) {
+
+                // Logout, e.g. clear our token and session.
+                this.logout();
+            }
         }
     }
 
@@ -65,10 +71,10 @@ export class AuthService {
     public logout(): void {
 
         // Clear from localStorage
-        localStorage[config.tokenName] = null;
+        localStorage.removeItem(config.tokenName);
 
         // ... and from the session object
-        this.session = null;
+        this._session = null;
     }
 
     private decodeToken(token: string): any {
@@ -102,6 +108,36 @@ export class AuthService {
         }
 
         return window.atob(output); // TODO: polifyll https://github.com/davidchambers/Base64.js
+    }
+
+    private isTokenExpired(): boolean {
+
+        if (!this.session) {
+
+            return true;
+        }
+
+        let d = this.getTokenExpirationDate();
+        if (!d) {
+
+            return false;
+        }
+
+        // Token expired?
+        return true;// !(d.valueOf() > new Date().valueOf());
+    }
+
+    private getTokenExpirationDate(): Date {
+
+        if (!this.session) {
+
+            return undefined;
+        }
+
+        let d = new Date(0); // The 0 here is the key, which sets the date to the epoch
+        d.setUTCSeconds(this.session.exp);
+
+        return d;
     }
     
     private httpClient: HttpClient;
