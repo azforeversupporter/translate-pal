@@ -1,5 +1,5 @@
 ﻿import {inject, Aurelia} from 'aurelia-framework';
-import {AuthService} from './common/services/auth-service';
+import {AuthService} from 'aurelia-auth';
 
 @inject(Aurelia, AuthService)
 export class Login {
@@ -12,36 +12,27 @@ export class Login {
 
     public username = '';
     public password = '';
-
-    attached() {
-
-        let isLoggedIn: string = localStorage.getItem('loggedIn');
-        if (new Boolean(isLoggedIn).valueOf()) {
-
-            this.aurelia.setRoot('app');
-        }
-    }
-
+    
     public login(evt: Event) {
-        
+
         this.authService
-            .login(this.username, this.password)
-            .then((success) => {
-
-                if (success) {
-
-                    this.aurelia.setRoot('app');
-                }
-                else {
-
-                    alert('No valid credentials');
-                }
-
-                this.username = null;
-                this.password = null;
+            .login(`grant_type=password&username=${this.username}&password=${this.password}&scopes=profile roles`, undefined)
+            .then(response => {
+                console.log('success logged: ' + response);
+                this.clearCredentials();
+                this.aurelia.setRoot('app');
+            })
+            .catch(err => {
+                this.clearCredentials();
+                console.log('login failure');
             });
 
         evt.preventDefault();
+    }
+
+    private clearCredentials(): void {
+        this.username = null;
+        this.password = null;
     }
 
     private aurelia: Aurelia = null;

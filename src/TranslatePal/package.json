@@ -20,6 +20,7 @@
   "bugs": "https://github.com/azforeversupporter/translate-pal/issues",
   "homepage": "https://github.com/azforeversupporter/translate-pal.git",
   "dependencies": {
+    "aurelia-auth": "^3.0.1",
     "aurelia-bootstrapper-webpack": "^1.0.0-beta.1.0.2",
     "aurelia-event-aggregator": "^1.0.0-beta.1.2.1",
     "aurelia-fetch-client": "^1.0.0-beta.1.2.5",

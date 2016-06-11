@@ -1,13 +1,18 @@
 ﻿import {Aurelia} from 'aurelia-framework';
 import {bootstrap} from 'aurelia-bootstrapper-webpack';
-import {AuthService} from './common/services/auth-service';
+import config from './authConfig';
+import {AuthService} from 'aurelia-auth';
 
 bootstrap((aurelia: Aurelia): void => {
 
     aurelia
         .use
         .standardConfiguration()
-        .developmentLogging();
+        .developmentLogging()
+        .plugin('aurelia-auth', (baseConfig) => {
+
+            baseConfig.configure(config);
+        });
 
     // After starting the aurelia, we can request the AuthService directly
     // from the DI container on the aurelia object. We can then set the 
@@ -15,7 +20,7 @@ bootstrap((aurelia: Aurelia): void => {
     aurelia.start().then(() => {
 
         let auth: AuthService = aurelia.container.get(AuthService);
-        let root = auth.isAuthenticated ? 'app' : 'login';
+        let root = auth.isAuthenticated() ? 'app' : 'login';
 
         aurelia.setRoot(root, document.body);
     });

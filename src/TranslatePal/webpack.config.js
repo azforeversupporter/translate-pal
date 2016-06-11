@@ -22,7 +22,10 @@ module.exports = {
     },
     plugins: [
         new AureliaWebpackPlugin({
-            src: path.resolve('./client')
+            src: path.resolve('./client'),
+            includeSubModules: [
+                { moduleId: 'aurelia-auth' }
+            ]
         }),
         new ProvidePlugin({
             Promise: 'bluebird'

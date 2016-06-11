@@ -1,18 +1,22 @@
 ﻿import {inject, Aurelia} from 'aurelia-framework';
 import {Router, RouterConfiguration} from 'aurelia-router';
 import {HttpClient} from 'aurelia-fetch-client';
+import {FetchConfig, AuthService} from 'aurelia-auth';
 
-@inject(Aurelia, HttpClient)
+@inject(Aurelia, HttpClient, FetchConfig, AuthService)
 export class App {
 
-    constructor(aurelia: Aurelia, http: HttpClient) {
+    constructor(aurelia: Aurelia, http: HttpClient, fetchConfig: FetchConfig, auth: AuthService) {
 
         this.aurelia = aurelia;
+        this.auth = auth;
+        this.fetchConfig = fetchConfig;
+
         http.configure(config => {
 
             // TODO: Load from configuration file
             config
-                .withBaseUrl('http://localhost:4999/api/v1/')
+                .withBaseUrl('http://localhost:5000/api/v1/')
                 .withDefaults({
                     headers: {
                         'Accept': 'application/json'
@@ -20,6 +24,10 @@ export class App {
                 })
                 .rejectErrorResponses();
         });
+    }
+
+    activate() {
+        this.fetchConfig.configure();
     }
 
     router: Router;
@@ -37,7 +45,10 @@ export class App {
 
     public logout(evt: Event) {
 
-        localStorage.removeItem('loggedIn');
+        this.auth.logout(undefined);
         this.aurelia.setRoot('login');
     }
+
+    private auth: AuthService;
+    private fetchConfig: FetchConfig;
 }
