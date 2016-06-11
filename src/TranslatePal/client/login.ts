@@ -16,7 +16,7 @@ export class Login {
     public login(evt: Event) {
 
         this.authService
-            .login(`grant_type=password&username=${this.username}&password=${this.password}&scopes=profile roles`, undefined)
+            .login(`grant_type=password&username=${this.username}&password=${this.password}&scope=email profile roles`, undefined)
             .then(response => {
                 console.log('success logged: ' + response);
                 this.clearCredentials();
