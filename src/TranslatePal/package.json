@@ -36,7 +36,10 @@
     "aurelia-templating-resources": "^1.0.0-beta.1.2.6",
     "aurelia-templating-router": "^1.0.0-beta.1.2.1",
     "bluebird": "^3.4.0",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "bootstrap-material-design": "^0.5.10",
+    "bootstrap": "3.3.6",
+    "jquery": "3.0.0"
   },
   "devDependencies": {
     "aurelia-tools": "^0.2.1",
