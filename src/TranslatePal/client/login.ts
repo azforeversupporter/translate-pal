@@ -1,37 +1,47 @@
 ﻿import {inject, Aurelia} from 'aurelia-framework';
+import {AuthService} from 'aurelia-auth';
 
-// TODO: Call our API server for authentication.
-
-@inject(Aurelia)
+@inject(Aurelia, AuthService)
 export class Login {
 
-    constructor(aurelia: Aurelia) {
+    constructor(aurelia: Aurelia, authService: AuthService) {
 
         this.aurelia = aurelia;
+        this.authService = authService;
     }
 
     public username = '';
     public password = '';
+    public rememberUsername = true;
 
-    attached() {
+    public attached() {
 
-        let isLoggedIn: string = localStorage.getItem('loggedIn');
-        if (new Boolean(isLoggedIn).valueOf()) {
-
-            this.aurelia.setRoot('app');
-        }
+        setTimeout(() => (<any>$).material.init(), 100);
     }
 
     public login(evt: Event) {
 
-        if (this.username === 'user' && this.password === 'test') {
-
-            localStorage.setItem('loggedIn', true.toString());
-            this.aurelia.setRoot('app');
-        }
+        this.authService
+            .login(`grant_type=password&username=${this.username}&password=${this.password}&scope=email profile roles`, undefined)
+            .then(response => {
+                console.log('success logged: ' + response);
+                this.clearCredentials();
+                this.aurelia.setRoot('app');
+            })
+            .catch(err => {
+                
+                this.clearCredentials();
+                console.log('login failure');
+            });
 
         evt.preventDefault();
     }
 
+    private clearCredentials(): void {
+        this.username = null;
+        this.password = null;
+    }
+
     private aurelia: Aurelia = null;
+    private authService: AuthService;
 }

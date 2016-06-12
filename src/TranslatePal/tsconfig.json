@@ -10,7 +10,8 @@
   "filesGlob": [
     "./client/**/*.ts",
     "!./node_modules",
-    "./typings/browser.d.ts"
+    "./typings/browser.d.ts",
+    "./typings/index.d.ts"
   ],
   "exclude": [
     "node_modules",

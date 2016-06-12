@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OpenIddict;
 
 namespace TranslatePal.Data.SqlServer
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : OpenIddictContext<ApplicationUser, ApplicationRole>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Application> Applications { get; set; }
+        public DbSet<Application> Apps { get; set; }
         public DbSet<Bundle> Bundles { get; set; }
         public DbSet<Element> Elements { get; set; }
         public DbSet<Resource> Resources { get; set; }

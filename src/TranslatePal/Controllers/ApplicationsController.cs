@@ -16,7 +16,7 @@ namespace TranslatePal.Controllers
         [Route("/api/v1/applications/")]
         public async Task<IActionResult> Get()
         {
-            var applications = await db.Applications
+            var applications = await db.Apps
                 .ToListAsync();
 
             return Ok(applications);
@@ -26,7 +26,7 @@ namespace TranslatePal.Controllers
         [Route("/api/v1/applications/{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var application = await db.Applications
+            var application = await db.Apps
                 .Include(a => a.Bundles)
                 .SingleOrDefaultAsync(app => app.Id == id);
 
@@ -47,7 +47,7 @@ namespace TranslatePal.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Applications.Add(application);
+            db.Apps.Add(application);
             await db.SaveChangesAsync();
 
             return Created($"/api/v1/applications/{application.Id}", application);
@@ -57,7 +57,7 @@ namespace TranslatePal.Controllers
         [Route("/api/v1/applications/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var application = await db.Applications
+            var application = await db.Apps
                 .SingleOrDefaultAsync(app => app.Id == id);
                 
             if (application == null) 
@@ -65,7 +65,7 @@ namespace TranslatePal.Controllers
                 return NotFound();
             }
             
-            db.Applications.Remove(application);
+            db.Apps.Remove(application);
             await db.SaveChangesAsync();
             
             return Ok();
