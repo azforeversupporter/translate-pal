@@ -1,13 +1,27 @@
 ﻿<template>
-    <form action="" method="post" submit.delegate="login($event)">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" value.bind="username" />
-        <br />
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" value.bind="password" />
-        <br />
-
-        <input type="submit" value="Log in" />
-    </form>
+    <div class="container">
+        <div class="col-centered">
+            <div class="well bs-component">
+                <form  method="post" submit.delegate="login($event)">
+                    <fieldset>
+                        <legend>Translate   Pal - Login</legend>
+                        <div class="form-group">
+                            <input type="text" class="form-control floating-label" value.bind="username" placeholder="Username" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control floating-label" value.bind="password" placeholder="Password" />
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked.bind="rememberUsername"> Remember username
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>

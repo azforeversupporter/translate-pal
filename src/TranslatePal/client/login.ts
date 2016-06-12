@@ -12,7 +12,13 @@ export class Login {
 
     public username = '';
     public password = '';
-    
+    public rememberUsername = true;
+
+    public attached() {
+
+        setTimeout(() => (<any>$).material.init(), 100);
+    }
+
     public login(evt: Event) {
 
         this.authService
@@ -23,6 +29,7 @@ export class Login {
                 this.aurelia.setRoot('app');
             })
             .catch(err => {
+                
                 this.clearCredentials();
                 console.log('login failure');
             });
