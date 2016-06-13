@@ -1,27 +1,25 @@
 ﻿<template>
     <div class="container">
-        <div class="col-centered">
-            <div class="well bs-component">
-                <form  method="post" submit.delegate="login($event)">
-                    <fieldset>
-                        <legend>Translate   Pal - Login</legend>
-                        <div class="form-group">
-                            <input type="text" class="form-control floating-label" value.bind="username" placeholder="Username" />
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control floating-label" value.bind="password" placeholder="Password" />
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" checked.bind="rememberUsername"> Remember username
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
+        <div class="row center-block well" style="width: 400px;">
+            <form method="post" submit.delegate="login($event)">
+                <div class="row text-center" style="margin-top:15px;">
+                    <i class="material-icons" style="font-size:80pt;color:#009688;">&#xE853;</i>
+                </div>
+                <div class="form-group">
+                    <input type="text" value.bind="username" placeholder="Username" class="form-control floating-label" />
+                </div>
+                <div class="form-group">
+                    <input type="password" value.bind="password" placeholder="Password" class="form-control floating-label" />
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" checked.bind="rememberUsername" /> Remember username
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
         </div>
     </div>
 </template>

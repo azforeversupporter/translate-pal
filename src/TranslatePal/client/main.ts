@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 (<any>window).jQuery = $;
 (<any>window).$ = $;
 
+import './assets/styles/material-icons.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css';
 import '../node_modules/bootstrap-material-design/dist/css/ripples.min.css';
