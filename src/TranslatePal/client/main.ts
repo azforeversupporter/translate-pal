@@ -2,6 +2,7 @@
 import {bootstrap} from 'aurelia-bootstrapper-webpack';
 import config from './authConfig';
 import {AuthService} from 'aurelia-auth';
+import {DOM} from 'aurelia-pal';
 import * as $ from 'jquery';
 (<any>window).jQuery = $;
 (<any>window).$ = $;
@@ -28,10 +29,10 @@ bootstrap((aurelia: Aurelia): void => {
     // from the DI container on the aurelia object. We can then set the 
     // correct root by querying the AuthService's isAuthenticated method.
     aurelia.start().then(() => {
-
+        
         let auth: AuthService = aurelia.container.get(AuthService);
         let root = auth.isAuthenticated() ? 'app' : 'login';
 
-        aurelia.setRoot(root, document.body);
+        aurelia.setRoot(root, DOM.getElementById('app-container'));
     });
 });
