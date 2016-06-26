@@ -8,4 +8,6 @@ bin/
 wwwroot/
 .awcache
 
+**/*/client/dist/
+
 !wwwroot/web.config

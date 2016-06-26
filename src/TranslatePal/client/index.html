@@ -8,8 +8,22 @@
 </head>
 <body>
     <div class="splash">
-        <div class="message"><%- webpackConfig.metadata.title %></div>
-        <i class="fa fa-spinner fa-spin"></i>
+        <div class="message"><%- webpackConfig.metadata.title %></div>        
+        <div style="margin-top:50px;">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <% if (webpackConfig.metadata.ENV === 'development') { %>
         <!-- Webpack Dev Server reload -->

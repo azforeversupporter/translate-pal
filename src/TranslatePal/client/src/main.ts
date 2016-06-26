@@ -4,6 +4,11 @@ import {bootstrap} from 'aurelia-bootstrapper-webpack';
 import authConfig from './config/auth-config';
 import {AuthService} from 'aurelia-auth';
 
+import {ConfigBuilder} from 'aurelia-materialize-bridge';
+
+import 'materialize-css/bin/materialize.css';
+import 'material-design-icons/iconfont/material-icons.css';
+
 bootstrap(async (aurelia: Aurelia) => {
 
     aurelia.use
@@ -12,7 +17,8 @@ bootstrap(async (aurelia: Aurelia) => {
         .plugin('aurelia-auth', (baseConfig) => {
         
             baseConfig.configure(authConfig);
-        });
+        })
+        .plugin('aurelia-materialize-bridge', (config: ConfigBuilder) => config.useAll());
 
     // Uncomment the line below to enable animation.
     // aurelia.use.plugin('aurelia-animator-css');
