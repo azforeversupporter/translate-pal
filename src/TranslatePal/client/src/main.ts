@@ -6,6 +6,9 @@ import {AuthService} from 'aurelia-auth';
 
 import {ConfigBuilder} from 'aurelia-materialize-bridge';
 
+import 'materialize-css/bin/materialize.css';
+import 'material-design-icons/iconfont/material-icons.css';
+
 bootstrap(async (aurelia: Aurelia) => {
 
     aurelia.use
