@@ -49,10 +49,24 @@
   "homepage": "https://github.com/azforeversupporter/translate-pal.git",
   "aurelia": {
     "build": {
-      "resources": [ ]
+      "resources": [
+        "aurelia-auth",
+        "aurelia-auth/authentication",
+        "aurelia-auth/auth-fetch-config",
+        "aurelia-auth/auth-filter",
+        "aurelia-auth/authorize-step",
+        "aurelia-auth/auth-service",
+        "aurelia-auth/auth-utilities",
+        "aurelia-auth/base-config",
+        "aurelia-auth/oAuth1",
+        "aurelia-auth/oAuth2",
+        "aurelia-auth/popup",
+        "aurelia-auth/storage"
+      ]
     }
   },
   "dependencies": {
+    "aurelia-auth": "^3.0.2",
     "aurelia-bootstrapper-webpack": "^1.0.0-rc.1.0.0",
     "aurelia-event-aggregator": "^1.0.0-rc.1.0.0",
     "aurelia-fetch-client": "^1.0.0-rc.1.0.0",
