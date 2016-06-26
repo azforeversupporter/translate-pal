@@ -6,5 +6,6 @@ typings/
 obj/
 bin/
 wwwroot/
+.awcache
 
 !wwwroot/web.config
