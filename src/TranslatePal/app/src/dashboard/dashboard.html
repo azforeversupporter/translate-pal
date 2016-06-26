@@ -1,0 +1,39 @@
+<template>
+    <a href="#!" click.delegate="logout($event)">Logout</a>
+
+    <h1>Dashboard</h1>
+
+    <h3>Applications</h3>
+    <ul class="applications">
+        <li repeat.for="app of applications" click.delegate="showDetails(app.id)">
+            ${app.displayName} - ${app.languages} <span click.delegate="deleteApp(app)">X</span>
+        </li>
+    </ul>
+
+    <div class="application-details">
+        <table>
+            <tr>
+                <td>Display name</td>
+                <td>${selectedApp.displayName}</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>${selectedApp.name}</td>
+            </tr>
+            <tr>
+                <td>Default language</td>
+                <td>${selectedApp.defaultLanguage}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">Languages</td>
+                <td>
+                    <ul style="list-style-type:none;margin:0;list-style:none;padding:0;">
+                        <li repeat.for="lang of selectedApp.availableLanguages">
+                            ${lang}
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</template>

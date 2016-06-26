@@ -21,7 +21,7 @@ export class Login {
 
                 console.log('Success logged: ' + response);
                 this.clearCredentials();
-                this.aurelia.setRoot('dashboard');
+                this.aurelia.setRoot('dashboard/dashboard');
             })
             .catch(err => {
 

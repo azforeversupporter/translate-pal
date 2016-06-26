@@ -26,7 +26,7 @@ bootstrap(async (aurelia: Aurelia) => {
     await aurelia.start();
 
     let auth: AuthService = aurelia.container.get(AuthService);
-    let root = auth.isAuthenticated() ? 'app' : 'login/login';
+    let root = auth.isAuthenticated() ? 'dashboard/dashboard' : 'login/login';
 
     aurelia.setRoot(root, rootElement);
 
