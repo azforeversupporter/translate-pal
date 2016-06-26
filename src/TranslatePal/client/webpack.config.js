@@ -59,6 +59,11 @@ const baseConfig = {
     },
     output: {
         path: outDir,
+    },
+    resolve: {
+        alias: {
+            'materialize': 'materialize-css'
+        }
     }
 };
 

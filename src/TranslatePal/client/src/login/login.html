@@ -1,7 +1,37 @@
 <template>
-    <form method="post" submit.delegate="login($event)">
-        <input type="text" value.bind="username" placeholder="username" />
-        <input type="password" value.bind="password" placeholder="password" />
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+    <require from="materialize-css/bin/materialize.css"></require>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s6 offset-s3">
+                <h5 class="center-align">Login</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 offset-s3">
+                <div class="row">
+                    <div class="col s12 m12 l12 z-depth-4 card-panel">
+                        <form  method="post" submit.delegate="login($event)" class="col s12">
+                            <div class="row" style="margin-top:15px;">
+                                <div class="col s12 center-align">
+                                    <i class="material-icons" style="font-size:80pt;color:#009688;">&#xE853;</i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <md-input md-label="Email" md-value.bind="username"></md-input>
+                                </div>
+                                <div class="col s12">
+                                    <md-input md-label="Password" md-type="password" md-value.bind="password"></md-input>
+                                </div>
+                                <div class="col s12">
+                                    <button type="submit" md-button="large: true;" md-waves class="col s12">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

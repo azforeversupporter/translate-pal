@@ -6,6 +6,7 @@
 // We want font-awesome to load as soon as possible to show the fa-spinner
 import './styles/styles.css';
 import 'font-awesome/css/font-awesome.css';
+import 'material-design-icons/iconfont/material-icons.css';
 
 // Comment out if you don't want a Promise polyfill
 import * as Bluebird from 'bluebird';
