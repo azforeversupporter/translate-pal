@@ -3,7 +3,7 @@ using OpenIddict;
 
 namespace TranslatePal.Data.SqlServer
 {
-    public class ApplicationDbContext : OpenIddictContext<ApplicationUser, ApplicationRole>
+    public class ApplicationDbContext : OpenIddictDbContext<ApplicationUser, ApplicationRole>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
