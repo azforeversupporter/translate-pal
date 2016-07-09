@@ -121,7 +121,8 @@
         "aurelia-materialize-bridge/navbar/navbar.css",
         "aurelia-materialize-bridge/sidenav/sidenav.css",
         "aurelia-materialize-bridge/slider/slider.css",
-        "aurelia-materialize-bridge/switch/switch.css"
+        "aurelia-materialize-bridge/switch/switch.css",
+        "identicon.js"
       ],
       "moduleRootOverride": {
         "aurelia-materialize-bridge": "dist/commonjs"
@@ -146,10 +147,12 @@
     "aurelia-templating-resources": "^1.0.0-rc.1.0.0",
     "aurelia-templating-router": "^1.0.0-rc.1.0.0",
     "bluebird": "^3.4.1",
+    "identicon.js": "^1.2.1",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.0.0",
     "material-design-icons": "^2.2.3",
-    "materialize-css": "^0.97.6"
+    "materialize-css": "^0.97.6",
+    "jssha": "^2.1.0"
   },
   "devDependencies": {
     "@easy-webpack/config-aurelia": "^2.0.1",

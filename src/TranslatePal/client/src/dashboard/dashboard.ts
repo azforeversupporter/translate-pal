@@ -2,6 +2,8 @@ import {inject, Aurelia} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
 import {Router, RouterConfiguration} from 'aurelia-router';
 import {AuthService} from 'aurelia-auth';
+import jsSHA from 'jssha';
+let Identicon: IIdenticon = require('identicon.js'); 
 
 interface Application {
     id?: number;
@@ -10,6 +12,7 @@ interface Application {
     name: string;
     languages?: string;
     availableLanguages: string[];
+    gravatar: string;
 }
 
 @inject(HttpClient, Aurelia, AuthService)
@@ -34,7 +37,22 @@ export class Dashboard {
             method: 'GET'
         })
         .then<Application[]>(response => response.json())
-        .then(data => this.applications = data)
+        .then((data: Application[]) => {
+            
+            this.applications = data.map(app => {
+
+                let sha = new jsSHA('SHA-512', 'TEXT');
+                sha.update(`${app.displayName}_${app.languages}_${app.name}_${app.id}`);
+                let hash = sha.getHash('HEX');
+                let imageData = new Identicon(hash, 216)
+                    .toString();
+                let dataUrl = `data:image/png;base64,${imageData}`;
+                
+                app.gravatar = dataUrl;
+
+                return app;
+            });
+        })
         .catch(reason => console.error(reason));
     }
 

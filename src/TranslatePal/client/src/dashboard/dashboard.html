@@ -1,39 +1,13 @@
 <template>
-    <a href="#!" click.delegate="logout($event)">Logout</a>
+    <require from="../components/navbar"></require>
+    <md-colors md-primary-color="#4db6ac"></md-colors>
+    <navbar></navbar>
 
-    <h1>Dashboard</h1>
-
-    <h3>Applications</h3>
-    <ul class="applications">
-        <li repeat.for="app of applications" click.delegate="showDetails(app.id)">
-            ${app.displayName} - ${app.languages} <span click.delegate="deleteApp(app)">X</span>
-        </li>
-    </ul>
-
-    <div class="application-details">
-        <table>
-            <tr>
-                <td>Display name</td>
-                <td>${selectedApp.displayName}</td>
-            </tr>
-            <tr>
-                <td>Name</td>
-                <td>${selectedApp.name}</td>
-            </tr>
-            <tr>
-                <td>Default language</td>
-                <td>${selectedApp.defaultLanguage}</td>
-            </tr>
-            <tr>
-                <td style="vertical-align:top">Languages</td>
-                <td>
-                    <ul style="list-style-type:none;margin:0;list-style:none;padding:0;">
-                        <li repeat.for="lang of selectedApp.availableLanguages">
-                            ${lang}
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
+    <div class="row">
+        <div class="col l1 m2" repeat.for="app of applications">
+            <md-card md-image.bind="app.gravatar">
+                <div>${app.displayName}</div>
+            </md-card>
+        </div>
     </div>
 </template>
