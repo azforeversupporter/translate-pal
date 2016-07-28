@@ -52,22 +52,23 @@ const coreBundles = {
         'aurelia-templating-binding',
         'aurelia-templating-router',
         'aurelia-templating-resources'
-    ]
+    ],
+    materialize: [
+      'materialize-css'
+    ],
+    'aurelia-materialize-bridge': [ 'aurelia-materialize-bridge' ]
 }
 
 const baseConfig = {
     entry: {
         'app': [/* this is filled by the aurelia-webpack-plugin */],
         'aurelia-bootstrap': coreBundles.bootstrap,
-        'aurelia': coreBundles.aurelia.filter(pkg => coreBundles.bootstrap.indexOf(pkg) === -1)
+        'aurelia': coreBundles.aurelia.filter(pkg => coreBundles.bootstrap.indexOf(pkg) === -1),
+        'materialize': coreBundles.materialize,
+        'aurelia-materialize-bridge': coreBundles['aurelia-materialize-bridge']
     },
     output: {
         path: outDir
-    },
-    resolve: {
-        alias: {
-            'materialize': 'materialize-css'
-        }
     }
 }
 
