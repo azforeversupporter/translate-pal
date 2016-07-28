@@ -6,6 +6,7 @@
     "selenium-webdriver": "github:DefinitelyTyped/DefinitelyTyped/selenium-webdriver/selenium-webdriver.d.ts#24e12a7af994afa2226af70fbfae0adc78736a9e"
   },
   "globalDependencies": {
+    "bluebird": "registry:dt/bluebird#2.0.0+20160701023356",
     "jssha": "registry:dt/jssha#1.6.0+20160317120654",
     "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160524142046"
   }
