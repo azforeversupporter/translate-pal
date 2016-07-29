@@ -1,4 +1,5 @@
 .vs
+.vscode
 *.xproj.user
 *.lock.json
 node_modules/

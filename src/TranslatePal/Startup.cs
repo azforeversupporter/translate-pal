@@ -28,7 +28,14 @@ namespace TranslatePal
             
             services.AddOpenIddict<ApplicationUser, ApplicationRole, ApplicationDbContext>()
                 .DisableHttpsRequirement()
-                .UseJsonWebTokens();
+                .EnableTokenEndpoint("/connect/token")
+                .UseJsonWebTokens()
+                // Register a new ephemeral key, that is discarded when the application
+                // shuts down. Tokens signed using this key are automatically invalidated.
+                // This method should only be used during development.
+                .AddEphemeralSigningKey()
+                .AllowPasswordFlow()
+                .AllowRefreshTokenFlow();
 
             services.AddCors();
 
@@ -55,6 +62,8 @@ namespace TranslatePal
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            app.UseOAuthValidation();
 
             app.UseOpenIddict();
 
