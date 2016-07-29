@@ -174,3 +174,11 @@ div.au-stagger {
     opacity: 1;
   }
 }
+
+/* Hotfixes/Workarounds for now, subject to change */
+md-input .input-field label {
+  transform: none !important;
+}
+md-input .input-field label.active {
+  transform: translateX(0) translateY(-140%) !important;
+}
