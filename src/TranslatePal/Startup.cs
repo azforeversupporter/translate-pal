@@ -79,7 +79,8 @@ namespace TranslatePal
 
             app.UseMvc();
 
-            SampleData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+            DbSeeder.SeedAsync(app.ApplicationServices)
+                .Wait();
         }
 
         public static void Main(string[] args)
