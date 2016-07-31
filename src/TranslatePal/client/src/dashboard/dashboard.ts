@@ -42,7 +42,7 @@ export class Dashboard {
             this.applications = data.map(app => {
 
                 let sha = new jsSHA('SHA-512', 'TEXT');
-                sha.update(`${app.displayName}_${app.languages}_${app.name}_${app.id}`);
+                sha.update(`${app.name}_${app.languages}_${app.name}_${app.id}`);
                 let hash = sha.getHash('HEX');
                 let imageData = new Identicon(hash, 512)
                     .toString();
@@ -63,7 +63,7 @@ export class Dashboard {
 
     public deleteApp(app: Application) {
 
-        if (confirm(`Are you sure you want to delete the application:\n${app.displayName}?\nThis change cannot be reverted!`)) {
+        if (confirm(`Are you sure you want to delete the application:\n${app.name}?\nThis change cannot be reverted!`)) {
 
             this.http.fetch(`applications/${app.id}`, {
                 method: 'DELETE'
