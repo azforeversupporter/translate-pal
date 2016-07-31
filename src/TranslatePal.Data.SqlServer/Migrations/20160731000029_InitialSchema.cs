@@ -5,18 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TranslatePal.Data.SqlServer.Migrations
 {
-    public partial class AuthenticationMigration : Migration
+    public partial class InitialSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Bundles_Applications_ApplicationId",
-                table: "Bundles");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Applications",
-                table: "Applications");
-
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
@@ -36,10 +28,11 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: true),
+                    ClientSecret = table.Column<string>(nullable: true),
                     DisplayName = table.Column<string>(nullable: true),
                     LogoutRedirectUri = table.Column<string>(nullable: true),
                     RedirectUri = table.Column<string>(nullable: true),
-                    Secret = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -60,13 +53,28 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DefaultLanguage = table.Column<string>(maxLength: 7, nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    Languages = table.Column<string>(maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    NormalizedName = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,22 +88,44 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Elements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ApplicationId = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Elements", x => x.Id);
+                    table.UniqueConstraint("AK_Elements_ApplicationId_Name", x => new { x.ApplicationId, x.Name });
+                    table.ForeignKey(
+                        name: "FK_Elements_Applications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "Applications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,10 +234,34 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Comment = table.Column<string>(nullable: true),
+                    ElementId = table.Column<int>(nullable: false),
+                    Language = table.Column<string>(maxLength: 10, nullable: false),
+                    Translation = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.UniqueConstraint("AK_Resources_ElementId_Language", x => new { x.ElementId, x.Language });
+                    table.ForeignKey(
+                        name: "FK_Resources_Elements_ElementId",
+                        column: x => x.ElementId,
+                        principalTable: "Elements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictTokens",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApplicationId = table.Column<string>(nullable: true),
                     AuthorizationId = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
@@ -215,6 +269,12 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OpenIddictTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "OpenIddictApplications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                         column: x => x.AuthorizationId,
@@ -228,15 +288,6 @@ namespace TranslatePal.Data.SqlServer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.RenameTable(
-                name: "Applications",
-                newName: "Apps");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Apps",
-                table: "Apps",
-                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -264,9 +315,20 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictApplications_ClientId",
+                table: "OpenIddictApplications",
+                column: "ClientId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictAuthorizations_UserId",
                 table: "OpenIddictAuthorizations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictTokens_ApplicationId",
+                table: "OpenIddictTokens",
+                column: "ApplicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictTokens_AuthorizationId",
@@ -291,27 +353,22 @@ namespace TranslatePal.Data.SqlServer.Migrations
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
-                column: "NormalizedUserName");
+                column: "NormalizedUserName",
+                unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Bundles_Apps_ApplicationId",
-                table: "Bundles",
-                column: "ApplicationId",
-                principalTable: "Apps",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_Elements_ApplicationId",
+                table: "Elements",
+                column: "ApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_ElementId",
+                table: "Resources",
+                column: "ElementId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Bundles_Apps_ApplicationId",
-                table: "Bundles");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Apps",
-                table: "Apps");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -328,39 +385,31 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "OpenIddictApplications");
-
-            migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictTokens");
 
             migrationBuilder.DropTable(
+                name: "Resources");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "OpenIddictApplications");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictAuthorizations");
 
             migrationBuilder.DropTable(
+                name: "Elements");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Applications",
-                table: "Applications",
-                column: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Bundles_Applications_ApplicationId",
-                table: "Bundles",
-                column: "ApplicationId",
-                principalTable: "Applications",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.RenameTable(
-                name: "Apps",
-                newName: "Applications");
+            migrationBuilder.DropTable(
+                name: "Applications");
         }
     }
 }

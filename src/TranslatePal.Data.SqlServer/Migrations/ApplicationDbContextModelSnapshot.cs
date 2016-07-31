@@ -13,7 +13,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
+                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -106,17 +106,22 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 {
                     b.Property<string>("Id");
 
+                    b.Property<string>("ClientId");
+
+                    b.Property<string>("ClientSecret");
+
                     b.Property<string>("DisplayName");
 
                     b.Property<string>("LogoutRedirectUri");
 
                     b.Property<string>("RedirectUri");
 
-                    b.Property<string>("Secret");
-
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
                     b.ToTable("OpenIddictApplications");
                 });
@@ -151,6 +156,8 @@ namespace TranslatePal.Data.SqlServer.Migrations
                 {
                     b.Property<string>("Id");
 
+                    b.Property<string>("ApplicationId");
+
                     b.Property<string>("AuthorizationId");
 
                     b.Property<string>("Type");
@@ -158,6 +165,8 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
 
                     b.HasIndex("AuthorizationId");
 
@@ -175,20 +184,18 @@ namespace TranslatePal.Data.SqlServer.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 7);
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
-
-                    b.Property<string>("Languages")
-                        .IsRequired();
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 255);
 
+                    b.Property<string>("languages")
+                        .IsRequired()
+                        .HasColumnName("Languages")
+                        .HasAnnotation("MaxLength", 255);
+
                     b.HasKey("Id");
 
-                    b.ToTable("Apps");
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.ApplicationRole", b =>
@@ -255,29 +262,10 @@ namespace TranslatePal.Data.SqlServer.Migrations
                         .HasName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
+                        .IsUnique()
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("TranslatePal.Data.SqlServer.Bundle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ApplicationId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Name", "ApplicationId");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("Bundles");
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Element", b =>
@@ -285,19 +273,18 @@ namespace TranslatePal.Data.SqlServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BundleId");
+                    b.Property<int>("ApplicationId");
 
                     b.Property<string>("Comment");
 
-                    b.Property<string>("ElementName")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("BundleId", "ElementName");
+                    b.HasAlternateKey("ApplicationId", "Name");
 
-                    b.HasIndex("BundleId");
+                    b.HasIndex("ApplicationId");
 
                     b.ToTable("Elements");
                 });
@@ -330,7 +317,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationRole")
-                        .WithMany()
+                        .WithMany("Claims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -338,7 +325,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -346,7 +333,7 @@ namespace TranslatePal.Data.SqlServer.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -354,12 +341,12 @@ namespace TranslatePal.Data.SqlServer.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationRole")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -367,41 +354,37 @@ namespace TranslatePal.Data.SqlServer.Migrations
             modelBuilder.Entity("OpenIddict.OpenIddictAuthorization", b =>
                 {
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Authorizations")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OpenIddict.OpenIddictToken", b =>
                 {
+                    b.HasOne("OpenIddict.OpenIddictApplication")
+                        .WithMany("Tokens")
+                        .HasForeignKey("ApplicationId");
+
                     b.HasOne("OpenIddict.OpenIddictAuthorization")
-                        .WithMany()
+                        .WithMany("Tokens")
                         .HasForeignKey("AuthorizationId");
 
                     b.HasOne("TranslatePal.Data.SqlServer.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Tokens")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TranslatePal.Data.SqlServer.Bundle", b =>
-                {
-                    b.HasOne("TranslatePal.Data.SqlServer.Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Element", b =>
                 {
-                    b.HasOne("TranslatePal.Data.SqlServer.Bundle")
-                        .WithMany()
-                        .HasForeignKey("BundleId")
+                    b.HasOne("TranslatePal.Data.SqlServer.Application", "Application")
+                        .WithMany("Elements")
+                        .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TranslatePal.Data.SqlServer.Resource", b =>
                 {
-                    b.HasOne("TranslatePal.Data.SqlServer.Element")
-                        .WithMany()
+                    b.HasOne("TranslatePal.Data.SqlServer.Element", "Element")
+                        .WithMany("Resources")
                         .HasForeignKey("ElementId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

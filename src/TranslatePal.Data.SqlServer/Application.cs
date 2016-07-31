@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+using Newtonsoft.Json;
 
 namespace TranslatePal.Data.SqlServer
 {
+    [Table("Applications")]
     public class Application
     {
         public Application()
         {
-            Bundles = new List<Bundle>();
+            Languages = new List<string>();
+            Elements = new List<Element>();
         }
 
         [Key]
@@ -18,32 +20,27 @@ namespace TranslatePal.Data.SqlServer
 
         [Required]
         [MaxLength(255)]
-        public string DisplayName { get; set; }
-
-        [Required]
-        [MaxLength(255)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(7)]
+        [MaxLengthAttribute(7)]
         public string DefaultLanguage { get; set; }
 
-        [Required]
-        public string Languages
+        private string languages 
         {
             get
             {
-                return string.Join(",", AvailableLanguages);
+                return JsonConvert.SerializeObject(Languages);
             }
             set
             {
-                AvailableLanguages = value.Split(',').ToList();
+                Languages = JsonConvert.DeserializeObject<List<string>>(value);
             }
         }
 
         [NotMapped]
-        public List<string> AvailableLanguages { get; set; }
+        public List<string> Languages { get; set; }
 
-        public virtual ICollection<Bundle> Bundles { get; set; }
+        public virtual ICollection<Element> Elements { get; set; }
     }
 }

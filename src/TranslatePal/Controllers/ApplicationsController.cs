@@ -27,7 +27,6 @@ namespace TranslatePal.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var application = await db.Apps
-                .Include(a => a.Bundles)
                 .SingleOrDefaultAsync(app => app.Id == id);
 
             if (application == null)
