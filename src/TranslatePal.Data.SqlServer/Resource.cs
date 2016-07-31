@@ -5,7 +5,7 @@ namespace TranslatePal.Data.SqlServer
     public class Resource
     {
         public Resource()
-        {
+        { 
         }
 
         [Key]

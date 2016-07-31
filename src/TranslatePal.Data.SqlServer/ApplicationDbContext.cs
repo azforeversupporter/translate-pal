@@ -11,7 +11,6 @@ namespace TranslatePal.Data.SqlServer
         }
 
         public DbSet<Application> Apps { get; set; }
-        public DbSet<Bundle> Bundles { get; set; }
         public DbSet<Element> Elements { get; set; }
         public DbSet<Resource> Resources { get; set; }
 
@@ -19,14 +18,17 @@ namespace TranslatePal.Data.SqlServer
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Bundle>()
-                .HasAlternateKey(bundle => new { bundle.Name, bundle.ApplicationId });
+            modelBuilder.Entity<Application>()
+                .Property(typeof(string), "languages")
+                .HasColumnName("Languages")
+                .HasMaxLength(255)
+                .IsRequired();
 
             modelBuilder.Entity<Element>()
-                .HasAlternateKey(element => new { element.BundleId, element.ElementName });
+                .HasAlternateKey(e => new { e.ApplicationId, e.Name });
 
             modelBuilder.Entity<Resource>()
-                .HasAlternateKey(resource => new { resource.ElementId, resource.Language });
+                .HasAlternateKey(r => new { r.ElementId, r.Language });
         }
     }
 }
